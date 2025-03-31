@@ -1,0 +1,13 @@
+
+[general]
+	bot_name = "MAChatbridge"
+	seperator = "»"
+	enabled = false
+
+[appearance]
+	bridge_bold = false
+	bridge_color = 1
+	discord_user_color = 1
+	bridge_prefix = "[BRIDGE]"
+	discord_user_bold = false
+
