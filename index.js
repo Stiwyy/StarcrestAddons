@@ -6,12 +6,11 @@ register("command", (...args) => {
         Settings.openGUI();
         return;
     }
-
+    const playerName = args[1];
     const subCommand = args[0].toLowerCase(); 
 
     switch (subCommand) {
         case "networth":
-            const playerName = args[1];
             if (!playerName) {
                 ChatLib.chat("§cUsage: /bridge networth <username>");
                 return;
@@ -32,7 +31,26 @@ register("command", (...args) => {
             );
             break;
             
-        
+        case "weight":
+            if (!playerName) {
+                ChatLib.chat("§cUsage: /bridge weight <username>");
+                return;
+            }
+            
+            request({
+                url: "https://soopy.dev/api/v2/leaderboard/networth/user/" + playerName,
+                headers: {
+                    "Content-Type": "application/json",
+                    "User-Agent": "Mozilla/5.0"
+                }
+            }
+        ).then(soopyResponse => {
+                const playerData = JSON.parse(soopyResponse)
+                const weight = playerData.data?.data?.userData?.weight;
+                ChatLib.chat("§aWeight of " + playerName + ": §6" + formatNumber(weight.toFixed(0)));
+            }
+            );
+            break;
 
         case "commands":
         case "commandslist":
@@ -40,6 +58,7 @@ register("command", (...args) => {
             ChatLib.chat([
                 "§3- /bridge §7»"+ "§8 Main command",
                 "§3- /bridge networth <player> §7»" +"§8 Shows player networth",
+                "§3- /bridge weight <player> §7»" +"§8 Shows player weight",
                 "§3- /bridge commands §7»" +"§8 Shows this help menu"
             ].join("\n"));
             break;
