@@ -1,8 +1,47 @@
 import Settings from "./settings";
+import request from "requestV2";
 
-register("command", () => {
-    Settings.openGUI();
-}).setTabCompletions("settings").setName("bridge");
+register("command", (...args) => {
+    if (args.length === 0) {
+        Settings.openGUI();
+        return;
+    }
+    if (args[0].toLowerCase() === "networth") {
+        const playerName = args[1];
+        if (!playerName) {
+            ChatLib.chat("§cVerwende: /bridge networth <Spielername>");
+            return;
+        }
+        const apiUrl = `https://api.mojang.com/users/profiles/minecraft/${playerName}`;
+        request(apiUrl).then(response => {
+            const data = JSON.parse(response);
+            const uuid = data.id;
+            if (!uuid) {
+                ChatLib.chat(`§cSpieler ${playerName} nicht gefunden.`);
+                return;
+            }
+            const networthUrl = `https://soopy.dev/api/v2/leaderboard/networth/user/${uuid}`;
+            request(networthUrl).then(networthResponse => {
+                const networthData = JSON.parse(networthResponse);
+                const nw = networthData.data?.data?.userData?.networth;
+                if (networthData.success && nw != null) {
+                    ChatLib.chat(`§aNet Worth von ${playerName}: §6${nw.toFixed(2)} Coins`);
+                } else {
+                    ChatLib.chat("§cFehler beim Abrufen des Net Worth.");
+                }
+            }).catch(() => {
+                ChatLib.chat("§cFehler beim Abrufen der Net Worth Daten.");
+            });
+        }).catch(() => {
+            ChatLib.chat("§cFehler beim Abrufen der UUID.");
+        });
+        return;
+    }
+    ChatLib.chat("§cUnbekannter Unterbefehl. Verwende: /bridge oder /bridge networth <Spielername>");
+}).setName("bridge").setTabCompletions(["networth"]);
+
+
+
 
 const colorArray = [
     "&4", "&c", "&6", "&e",

@@ -3,5 +3,5 @@
     "description": "Has the features of BetterBridge and also decodes base64 Messages that start with *username* *»* *[Images]* *Base64 code*",
     "version": "1.0.0",
     "entry": "index.js",
-    "requires": ["Vigilance"]
+    "requires": ["Vigilance", "requestV2"]
 }
