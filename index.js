@@ -2,45 +2,57 @@ import Settings from "./settings";
 import request from "requestV2";
 
 register("command", (...args) => {
-    if (args.length === 0) {
+    if (!args || args.length === 0) {
         Settings.openGUI();
         return;
     }
-    if (args[0].toLowerCase() === "networth") {
-        const playerName = args[1];
-        if (!playerName) {
-            ChatLib.chat("§cVerwende: /bridge networth <Spielername>");
-            return;
-        }
-        const apiUrl = `https://api.mojang.com/users/profiles/minecraft/${playerName}`;
-        request(apiUrl).then(response => {
-            const data = JSON.parse(response);
-            const uuid = data.id;
-            if (!uuid) {
-                ChatLib.chat(`§cSpieler ${playerName} nicht gefunden.`);
+
+    const subCommand = args[0].toLowerCase(); 
+
+    switch (subCommand) {
+        case "networth":
+            const playerName = args[1];
+            if (!playerName) {
+                ChatLib.chat("§cUsage: /bridge networth <username>");
                 return;
             }
-            const networthUrl = `https://soopy.dev/api/v2/leaderboard/networth/user/${uuid}`;
-            request(networthUrl).then(networthResponse => {
-                const networthData = JSON.parse(networthResponse);
-                const nw = networthData.data?.data?.userData?.networth;
-                if (networthData.success && nw != null) {
-                    ChatLib.chat(`§aNet Worth von ${playerName}: §6${nw.toFixed(2)} Coins`);
-                } else {
-                    ChatLib.chat("§cFehler beim Abrufen des Net Worth.");
+            
+            request({
+                url: "https://soopy.dev/api/v2/leaderboard/networth/user/" + playerName,
+                headers: {
+                    "Content-Type": "application/json",
+                    "User-Agent": "Mozilla/5.0"
                 }
-            }).catch(() => {
-                ChatLib.chat("§cFehler beim Abrufen der Net Worth Daten.");
-            });
-        }).catch(() => {
-            ChatLib.chat("§cFehler beim Abrufen der UUID.");
-        });
-        return;
+            }
+        ).then(soopyResponse => {
+                const playerData = JSON.parse(soopyResponse)
+                const networth = playerData.data?.data?.userData?.networth;
+                ChatLib.chat("§aNet Worth of " + playerName + ": §6" + formatNumber(networth.toFixed(0)) + " Coins");
+            }
+            );
+            break;
+            
+        
+
+        case "commands":
+        case "commandslist":
+        case "help":
+            ChatLib.chat([
+                "§3- /bridge §7»"+ "§8 Main command",
+                "§3- /bridge networth <player> §7»" +"§8 Shows player networth",
+                "§3- /bridge commands §7»" +"§8 Shows this help menu"
+            ].join("\n"));
+            break;
+
+        default:
+            ChatLib.chat("§cUnknown command. Use §a/bridge commands §cfor help");
+            break;
     }
-    ChatLib.chat("§cUnbekannter Unterbefehl. Verwende: /bridge oder /bridge networth <Spielername>");
-}).setName("bridge").setTabCompletions(["networth"]);
+}).setName("bridge");
 
-
+function formatNumber(num) {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
 
 
 const colorArray = [
@@ -58,7 +70,7 @@ register("chat", bridgeChat).setCriteria("&r&2Guild > ${bot}: &r${player}" + Set
 function bridgeChat(bot, player, msg, event) {
     if (!Settings.enabled || Settings.botName.toLowerCase() !== ChatLib.removeFormatting(bot).toLowerCase()) return;
     cancel(event);
-    
+
     let bridgeText = Settings.prefix;
     let bridgeBold = Settings.prefixBold === true ? "&l" : "";
     let discordBold = Settings.userBold === true ? "&l" : "";
@@ -129,24 +141,24 @@ const brainRot = [
     "looks maxing", "alpha", "griddy", "chris tyson", "diddy", "imagine if ninja got a low taper fade",
     "skibidi gyatt rizz only in ohio", "duke dennis", "did you pray today", "livvy dunne rizzing up baby gronk",
     "sussy imposter", "pibby glitch in real life", "sigma alpha omega male grindset", "andrew tate",
-    "goon cave", "freddy fazbear", "colleen ballinger", "smurf cat vs strawberry elephant", 
-    "blud dawg shmlawg", "ishowspeed", "a whole bunch of turbulence", "ambatukam", 
+    "goon cave", "freddy fazbear", "colleen ballinger", "smurf cat vs strawberry elephant",
+    "blud dawg shmlawg", "ishowspeed", "a whole bunch of turbulence", "ambatukam",
     "bro really thinks he's carti", "literally hitting the griddy the ocky way", "kai cenat",
-    "fanum tax", "garten of banban", "no edging in class", "not the mosquito again", 
+    "fanum tax", "garten of banban", "no edging in class", "not the mosquito again",
     "bussing", "axel in harlem", "whopper whopper whopper whopper", "1 2 buckle my shoe",
-    "goofy ahh", "aiden ross", "sin city", "monday left me broken", 
+    "goofy ahh", "aiden ross", "sin city", "monday left me broken",
     "quirked up white boy busting it down sexual style", "goated with the sauce", "john pork",
     "grimace shake", "kiki do you love me", "huggy wuggy", "nathaniel b", "lightskin stare",
     "biggest bird", "omar the referee", "amogus", "uncanny", "wholesome reddit", "chungus",
     "keanu reeves", "pizza tower", "zesty", "poggers", "kumalala savesta", "quandale dingle",
     "glizzy", "rose toy", "ankha zone", "thug shaker", "morbin time", "dj khaled",
-    "sisyphus", "oceangate", "shadow wizard money gang", "ayo the pizza here", 
-    "PLUH", "nair butthole waxing", "t-pose", "ugandan knuckles", 
+    "sisyphus", "oceangate", "shadow wizard money gang", "ayo the pizza here",
+    "PLUH", "nair butthole waxing", "t-pose", "ugandan knuckles",
     "family guy funny moments compilation with subway surfers gameplay at the bottom",
     "nickeh30", "ratio", "uwu", "delulu", "opium bird", "cg5", "mewing",
-    "fortnite battle pass", "all my fellas", "gta 6", "backrooms", "gigachad", 
+    "fortnite battle pass", "all my fellas", "gta 6", "backrooms", "gigachad",
     "based", "cringe", "kino", "redpilled", "no nut november", "pokénut november",
-    "foot fetish", "F in the chat", "i love lean", "looksmaxxing", "gassy", 
+    "foot fetish", "F in the chat", "i love lean", "looksmaxxing", "gassy",
     "social credit", "bing chilling", "xbox live", "mrbeast", "kid named finger",
     "better caul saul", "i am a surgeon", "hit or miss i guess they never miss huh",
     "i like ya cut g", "ice spice", "gooning", "fr", "we go gym", "kevin james",
