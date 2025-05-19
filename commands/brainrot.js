@@ -1,4 +1,4 @@
-import Settings from "./settings";
+import Settings from "../settings";
 const brainRot = [
     "skibidi", "skibidi toilet", "gyatt", "mewing", "mew", "rizz", "rizzing", "rizzler",
     "on skibidi", "sigma", "what the sigma", "Ohio", "bussin'", "cook", "cooking",

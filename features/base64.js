@@ -1,4 +1,4 @@
-import Settings from "./settings";
+import Settings from "../settings";
 const colorArray = [
     "&4", "&c", "&6", "&e",
     "&2", "&a", "&b", "&3",

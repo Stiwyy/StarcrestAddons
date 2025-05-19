@@ -1,9 +1,3 @@
-import Settings from "./settings";
-import commands from "./commands";
-import features from "./features";
-
-update();
-function update() {
-	commands.update();
-	features.update();
-}
+import "./commands/brainrot";
+import "./commands/bridge";
+import "./features/base64";

@@ -1,5 +1,5 @@
 import request from "requestV2";
-import Settings from "./settings";
+import Settings from "../settings";
 
 register("command", (...args) => {
     if (!args || args.length === 0) {
