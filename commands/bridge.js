@@ -56,10 +56,11 @@ register("command", (...args) => {
         case "commandslist":
         case "help":
             ChatLib.chat([
-                "§3- /bridge §7»"+ "§8 Main command",
-                "§3- /bridge networth <player> §7»" +"§8 Shows player networth",
-                "§3- /bridge weight <player> §7»" +"§8 Shows player weight",
-                "§3- /bridge commands §7»" +"§8 Shows this help menu"
+                "§3- /bridge §7»"+ "§8 Main command.",
+                "§3- /bridge networth <player> §7»" +"§8 Shows player networth.",
+                "§3- /bridge weight <player> §7»" +"§8 Shows player weight.",
+                "§3- /bridge commands §7»" +"§8 Shows this help menu.",
+                "§3- /skibidi §7»" + "§8 Prints a random brainrot word." 
             ].join("\n"));
             break;
 
