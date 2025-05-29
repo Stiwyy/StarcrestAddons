@@ -1,7 +1,7 @@
 
 [general]
 	bot_name = "MAChatbridge"
-	auto_rejoin = false
+	auto_rejoin = true
 	seperator = "»"
 	enabled = true
 
