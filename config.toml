@@ -1,0 +1,7 @@
+
+[general]
+	bot_name = "MAChatbridge"
+	autorejoin = true
+	seperator = "»"
+	enabled = true
+
