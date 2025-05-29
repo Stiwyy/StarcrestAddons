@@ -32,7 +32,7 @@ class Settings {
     seperator = ":"
    
     @SwitchProperty({
-        name: "autoRejoin",
+        name: "Auto Rejoin",
         description: "Automatically rejoin skyblock after getting kicked while joining that server",
         category: "General",
     })

@@ -1,6 +1,6 @@
 import Settings from "../settings";
 function autoRejoin() {
-    if (!Settings.enabled || !Settings.autoRejoin) return;
+    if (!Settings.enabled && !Settings.autoRejoin) return;
     const rejoinDelay = 60000; // 1 minute
         
     setTimeout(() => {
