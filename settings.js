@@ -1,6 +1,3 @@
-//All taken from universal bridge https://github.com/MisterCheezeCake/UniversalBridge
-
-
 import { @Vigilant, @TextProperty, @ColorProperty, @ButtonProperty, @SwitchProperty, @CheckboxProperty, @SelectorProperty } from '../Vigilance/index';
 
 @Vigilant("BridgebotImages", "Settings", {
