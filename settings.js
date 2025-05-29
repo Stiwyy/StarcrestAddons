@@ -35,6 +35,7 @@ class Settings {
         name: "Auto Rejoin",
         description: "Automatically rejoin skyblock after getting kicked while joining that server",
         category: "General",
+        property: "auto_rejoin"
     })
     autoRejoin = false 
 
