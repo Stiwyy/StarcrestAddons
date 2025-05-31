@@ -1,0 +1,85 @@
+import Settings from "../settings";
+import ScalableGui from "../../BloomCore/utils/ScalableGui";
+
+// Globale Variablen
+let bonzotime = 0;
+let spirittime = 0;
+let phoenixtime = 0;
+let proctext = " ";
+
+// Create ScalableGui instance
+const maskTimerGui = new ScalableGui(Settings, Settings.maskTimerGui ||= {}).setCommand("masktimergui");
+if (!Settings.maskTimerGui) Settings.maskTimerGui = { x: 100, y: 100, scale: 1 };
+
+// Only keep Text for proc since timers will use scalable rendering
+const procText = new Text('').setScale(2).setShadow(true).setColor(Renderer.WHITE);
+
+function resetTimer(type, duration, message) {
+    switch (type) {
+        case 'bonzo': bonzotime = duration; break;
+        case 'spirit': spirittime = duration; break;
+        case 'phoenix': phoenixtime = duration; break;
+    }
+    
+    proctext = message;
+    setTimeout(() => {
+        if (proctext === message) proctext = " ";
+    }, 1500);
+}
+
+function decrementTimers() {
+    bonzotime--;
+    spirittime--;
+    phoenixtime--;
+}
+
+// Function to draw timers (used by both scalable and regular rendering)
+function drawTimers() {
+    const timerData = [
+        { time: bonzotime, text: 'Bonzo', color: '&9', yOffset: 0 },
+        { time: spirittime, text: 'Spirit', color: '&f', yOffset: 18 },
+        { time: phoenixtime, text: 'Phoenix', color: '&c', yOffset: 36 }
+    ];
+
+    timerData.forEach(timer => {
+        const str = timer.time <= 0 
+            ? `${timer.color}${timer.text}: &a✔` 
+            : `${timer.color}${timer.text}: &6${(timer.time / 10).toFixed(1)}`;
+        Renderer.drawString(str, 0, timer.yOffset);
+    });
+}
+
+// Register rendering for the scalable GUI (when editor is open)
+maskTimerGui.onRender(() => {
+    if (!Settings.maskTimerEnabled) return;
+    drawTimers();
+}, true);
+
+// Register rendering for normal display
+register("renderOverlay", () => {
+    if (!Settings.maskTimerEnabled || maskTimerGui.isOpen()) return;
+    
+    Renderer.translate(maskTimerGui.getX(), maskTimerGui.getY());
+    Renderer.scale(maskTimerGui.getScale());
+    drawTimers();
+    Renderer.finishDraw();
+});
+
+// Proc text rendering (remains separate)
+function renderProcText() {
+    if (!Settings.maskTimerEnabled) return;
+    procText.setString(proctext).draw(400, 100);
+}
+
+register("step", decrementTimers).setFps(10);
+
+register("chat", () => resetTimer('bonzo', 1800, "&9Bonzo Mask Procced"))
+    .setCriteria(/Your (⚚)? Bonzo's Mask saved your life!/);
+
+register("chat", () => resetTimer('spirit', 300, "&fSpirit Mask Procced"))
+    .setCriteria("Second Wind Activated! Your Spirit Mask saved your life!");
+
+register("chat", () => resetTimer('phoenix', 600, "&cPhoenix Procced"))
+    .setCriteria("Your Phoenix Pet saved you from certain death!");
+
+register("renderOverlay", renderProcText);

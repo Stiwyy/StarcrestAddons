@@ -1,5 +1,5 @@
 {
-    "name": "BridgebotImages",
+    "name": "Starcrest Addons",
     "description": "Decodes base64 Messages that start with <username> <seperator> <[Images]> <Base64 code> \n Also has some features suggested by the starcrest community-",
     "version": "1.2.0",
     "entry": "index.js",

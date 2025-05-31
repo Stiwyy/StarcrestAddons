@@ -12,7 +12,7 @@ register("command", (...args) => {
     switch (subCommand) {
         case "networth":
             if (!playerName) {
-                ChatLib.chat("§cUsage: /bridge networth <username>");
+                ChatLib.chat("§cUsage: /sca networth <username>");
                 return;
             }
             
@@ -33,7 +33,7 @@ register("command", (...args) => {
             
         case "weight":
             if (!playerName) {
-                ChatLib.chat("§cUsage: /bridge weight <username>");
+                ChatLib.chat("§cUsage: /sca weight <username>");
                 return;
             }
             
@@ -81,21 +81,21 @@ register("command", (...args) => {
         case "commandslist":
         case "help":
             ChatLib.chat([
-                "§3- /bridge §7»"+ "§8 Main command.",
-                "§3- /bridge networth <player> §7»" +"§8 Shows player networth.",
-                "§3- /bridge weight <player> §7»" +"§8 Shows player weight.",
-                "§3- /bridge mayor §7»" +"§8 Shows current mayor and their perks.",
-                "§3- /bridge commands §7»" +"§8 Shows this help menu.",
+                "§3- /sca §7»"+ "§8 Main command.",
+                "§3- /sca networth <player> §7»" +"§8 Shows player networth.",
+                "§3- /sca weight <player> §7»" +"§8 Shows player weight.",
+                "§3- /sca mayor §7»" +"§8 Shows current mayor and their perks.",
+                "§3- /sca commands §7»" +"§8 Shows this help menu.",
                 "§3- /star help §7»" +"§8 Prints out a list of commands you can use.",
                 "§3- /skibidi §7»" + "§8 Prints a random brainrot word." 
             ].join("\n"));
             break;
         
         default:
-            ChatLib.chat("§cUnknown command. Use §a/bridge commands §cfor help");
+            ChatLib.chat("§cUnknown command. Use §a/sca commands §cfor help");
             break;
     }
-}).setName("bridge");
+}).setName("sca");
 
 function formatNumber(num) {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
