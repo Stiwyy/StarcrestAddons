@@ -1,85 +1,116 @@
 import Settings from "../settings";
 import ScalableGui from "../../BloomCore/utils/ScalableGui";
 
-// Globale Variablen
-let bonzotime = 0;
-let spirittime = 0;
+let bonzotime   = 0;
+let spirittime  = 0;
 let phoenixtime = 0;
-let proctext = " ";
+let proctext    = "";
 
-// Create ScalableGui instance
-const maskTimerGui = new ScalableGui(Settings, Settings.maskTimerGui ||= {}).setCommand("masktimergui");
-if (!Settings.maskTimerGui) Settings.maskTimerGui = { x: 100, y: 100, scale: 1 };
+Settings.bonzoTimerGui   = Settings.bonzoTimerGui   || { x:  50, y:  50, scale: 1 };
+Settings.spiritTimerGui  = Settings.spiritTimerGui  || { x: 200, y:  50, scale: 1 };
+Settings.phoenixTimerGui = Settings.phoenixTimerGui || { x: 350, y:  50, scale: 1 };
 
-// Only keep Text for proc since timers will use scalable rendering
-const procText = new Text('').setScale(2).setShadow(true).setColor(Renderer.WHITE);
+const bonzoGui   = new ScalableGui(Settings, Settings.bonzoTimerGui).setCommand("bonzogui");
+const spiritGui  = new ScalableGui(Settings, Settings.spiritTimerGui).setCommand("spiritgui");
+const phoenixGui = new ScalableGui(Settings, Settings.phoenixTimerGui).setCommand("phoenixgui");
+
+const bonzoText   = new Text("").setScale(2).setShadow(true).setColor(Renderer.WHITE);
+const spiritText  = new Text("").setScale(2).setShadow(true).setColor(Renderer.WHITE);
+const phoenixText = new Text("").setScale(2).setShadow(true).setColor(Renderer.WHITE);
 
 function resetTimer(type, duration, message) {
     switch (type) {
-        case 'bonzo': bonzotime = duration; break;
-        case 'spirit': spirittime = duration; break;
-        case 'phoenix': phoenixtime = duration; break;
+        case "bonzo":   bonzotime   = duration; break;
+        case "spirit":  spirittime = duration; break;
+        case "phoenix": phoenixtime = duration; break;
     }
-    
     proctext = message;
     setTimeout(() => {
-        if (proctext === message) proctext = " ";
+        if (proctext === message) proctext = "";
     }, 1500);
 }
 
 function decrementTimers() {
-    bonzotime--;
-    spirittime--;
-    phoenixtime--;
+    if (bonzotime   > 0) bonzotime--;
+    if (spirittime > 0) spirittime--;
+    if (phoenixtime > 0) phoenixtime--;
 }
 
-// Function to draw timers (used by both scalable and regular rendering)
-function drawTimers() {
-    const timerData = [
-        { time: bonzotime, text: 'Bonzo', color: '&9', yOffset: 0 },
-        { time: spirittime, text: 'Spirit', color: '&f', yOffset: 18 },
-        { time: phoenixtime, text: 'Phoenix', color: '&c', yOffset: 36 }
-    ];
-
-    timerData.forEach(timer => {
-        const str = timer.time <= 0 
-            ? `${timer.color}${timer.text}: &a✔` 
-            : `${timer.color}${timer.text}: &6${(timer.time / 10).toFixed(1)}`;
-        Renderer.drawString(str, 0, timer.yOffset);
-    });
-}
-
-// Register rendering for the scalable GUI (when editor is open)
-maskTimerGui.onRender(() => {
+bonzoGui.onRender(() => {
     if (!Settings.maskTimerEnabled) return;
-    drawTimers();
+    const str = (bonzotime <= 0)
+        ? "&9Bonzo: &a✔"
+        : `&9Bonzo: &6${(bonzotime / 10).toFixed(1)}`;
+    bonzoText.setString(str).draw(0, 0);
 }, true);
 
-// Register rendering for normal display
+spiritGui.onRender(() => {
+    if (!Settings.maskTimerEnabled) return;
+    const str = (spirittime <= 0)
+        ? "&fSpirit: &a✔"
+        : `&fSpirit: &6${(spirittime / 10).toFixed(1)}`;
+    spiritText.setString(str).draw(0, 0);
+}, true);
+
+phoenixGui.onRender(() => {
+    if (!Settings.maskTimerEnabled) return;
+    const str = (phoenixtime <= 0)
+        ? "&cPhoenix: &a✔"
+        : `&cPhoenix: &6${(phoenixtime / 10).toFixed(1)}`;
+    phoenixText.setString(str).draw(0, 0);
+}, true);
+
 register("renderOverlay", () => {
-    if (!Settings.maskTimerEnabled || maskTimerGui.isOpen()) return;
-    
-    Renderer.translate(maskTimerGui.getX(), maskTimerGui.getY());
-    Renderer.scale(maskTimerGui.getScale());
-    drawTimers();
-    Renderer.finishDraw();
+    if (!Settings.maskTimerEnabled) return;
+
+    if (!bonzoGui.isOpen()) {
+        Renderer.translate(bonzoGui.getX(), bonzoGui.getY());
+        Renderer.scale(bonzoGui.getScale());
+        const str = (bonzotime <= 0)
+            ? "&9Bonzo: &a✔"
+            : `&9Bonzo: &6${(bonzotime / 10).toFixed(1)}`;
+        bonzoText.setString(str).draw(0, 0);
+        Renderer.finishDraw();
+    }
+
+    if (!spiritGui.isOpen()) {
+        Renderer.translate(spiritGui.getX(), spiritGui.getY());
+        Renderer.scale(spiritGui.getScale());
+        const str = (spirittime <= 0)
+            ? "&fSpirit: &a✔"
+            : `&fSpirit: &6${(spirittime / 10).toFixed(1)}`;
+        spiritText.setString(str).draw(0, 0);
+        Renderer.finishDraw();
+    }
+
+    if (!phoenixGui.isOpen()) {
+        Renderer.translate(phoenixGui.getX(), phoenixGui.getY());
+        Renderer.scale(phoenixGui.getScale());
+        const str = (phoenixtime <= 0)
+            ? "&cPhoenix: &a✔"
+            : `&cPhoenix: &6${(phoenixtime / 10).toFixed(1)}`;
+        phoenixText.setString(str).draw(0, 0);
+        Renderer.finishDraw();
+    }
 });
 
-// Proc text rendering (remains separate)
 function renderProcText() {
     if (!Settings.maskTimerEnabled) return;
-    procText.setString(proctext).draw(400, 100);
+    new Text(proctext)
+        .setScale(2)
+        .setShadow(true)
+        .setColor(Renderer.WHITE)
+        .draw(400, 100);
 }
+register("renderOverlay", renderProcText);
 
 register("step", decrementTimers).setFps(10);
 
-register("chat", () => resetTimer('bonzo', 1800, "&9Bonzo Mask Procced"))
+register("chat", () => resetTimer("bonzo", 1800, "&9Bonzo Mask Procced"))
     .setCriteria(/Your (⚚)? Bonzo's Mask saved your life!/);
 
-register("chat", () => resetTimer('spirit', 300, "&fSpirit Mask Procced"))
+register("chat", () => resetTimer("spirit", 300, "&fSpirit Mask Procced"))
     .setCriteria("Second Wind Activated! Your Spirit Mask saved your life!");
 
-register("chat", () => resetTimer('phoenix', 600, "&cPhoenix Procced"))
+register("chat", () => resetTimer("phoenix", 600, "&cPhoenix Procced"))
     .setCriteria("Your Phoenix Pet saved you from certain death!");
-
-register("renderOverlay", renderProcText);

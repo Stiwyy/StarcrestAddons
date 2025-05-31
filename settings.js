@@ -50,13 +50,33 @@ class Settings {
     maskTimerEnabled = false;
 
     @ButtonProperty({
-        name: "Move",
-        description: "Open the Mask Timer GUI to move it",
+        name: "Move Bonzo GUI",
+        description: "Open the Bonzo Timer GUI to move it",
         category: "Mask Timer",
         placeholder: "Move"
     })
-    MoveMaskTimerGui() {
-        ChatLib.command("masktimergui", true);
+    MoveBonzoTimerGui() {
+        ChatLib.command("bonzogui", true);
+    }
+
+    @ButtonProperty({
+        name: "Move Spirit GUI",
+        description: "Open the Spirit Timer GUI to move it",
+        category: "Mask Timer",
+        placeholder: "Move"
+    })
+    MoveSpiritTimerGui() {
+        ChatLib.command("spiritgui", true);
+    }
+
+    @ButtonProperty({
+        name: "Move Phoenix GUI",
+        description: "Open the Phoenix Timer GUI to move it",
+        category: "Mask Timer",
+        placeholder: "Move"
+    })
+    MovePhoenixTimerGui() {
+        ChatLib.command("phoenixgui", true);
     }
 
 
