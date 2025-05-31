@@ -1,6 +1,6 @@
 {
     "name": "BridgebotImages",
-    "description": "Has the features of BetterBridge and also decodes base64 Messages that start with *username* *»* *[Images]* *Base64 code*",
+    "description": "Decodes base64 Messages that start with <username> <seperator> <[Images]> <Base64 code> \n Also has some features suggested by the starcrest community-",
     "version": "1.2.0",
     "entry": "index.js",
     "requires": ["Vigilance", "requestV2"]
