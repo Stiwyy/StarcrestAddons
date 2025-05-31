@@ -12,6 +12,6 @@ function autoRejoin() {
 }
 register("chat", () => {
     autoRejoin();
-}).setCriteria("A kick occurred in your connection, so you were put in the SkyBlock lobby!");
+}).setCriteria("You were kicked while joining that server!");
 
 

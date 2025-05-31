@@ -1,0 +1,17 @@
+{
+    "bonzoTimerGui": {
+        "x": 10,
+        "y": 5,
+        "scale": 0.5
+    },
+    "spiritTimerGui": {
+        "x": 10,
+        "y": 15,
+        "scale": 0.5
+    },
+    "phoenixTimerGui": {
+        "x": 10,
+        "y": 25,
+        "scale": 0.5
+    }
+}

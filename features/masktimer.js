@@ -1,18 +1,23 @@
 import Settings from "../settings";
 import ScalableGui from "../../BloomCore/utils/ScalableGui";
+import PogObject from "../../PogData";
 
 let bonzotime   = 0;
 let spirittime  = 0;
 let phoenixtime = 0;
 let proctext    = "";
 
-Settings.bonzoTimerGui   = Settings.bonzoTimerGui   || { x:  50, y:  50, scale: 1 };
-Settings.spiritTimerGui  = Settings.spiritTimerGui  || { x: 200, y:  50, scale: 1 };
-Settings.phoenixTimerGui = Settings.phoenixTimerGui || { x: 350, y:  50, scale: 1 };
+const data = new PogObject("StarcrestAddons", {
+    bonzoTimerGui:   { x: 50, y: 50, scale: 1 },
+    spiritTimerGui:  { x: 200, y: 50, scale: 1 },
+    phoenixTimerGui: { x: 350, y: 50, scale: 1 }
+}, "data.json");
 
-const bonzoGui   = new ScalableGui(Settings, Settings.bonzoTimerGui).setCommand("bonzogui");
-const spiritGui  = new ScalableGui(Settings, Settings.spiritTimerGui).setCommand("spiritgui");
-const phoenixGui = new ScalableGui(Settings, Settings.phoenixTimerGui).setCommand("phoenixgui");
+data.autosave(1);
+
+const bonzoGui   = new ScalableGui(data, data.bonzoTimerGui).setCommand("bonzogui");
+const spiritGui  = new ScalableGui(data, data.spiritTimerGui).setCommand("spiritgui");
+const phoenixGui = new ScalableGui(data, data.phoenixTimerGui).setCommand("phoenixgui");
 
 const bonzoText   = new Text("").setScale(2).setShadow(true).setColor(Renderer.WHITE);
 const spiritText  = new Text("").setScale(2).setShadow(true).setColor(Renderer.WHITE);
