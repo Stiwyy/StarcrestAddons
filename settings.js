@@ -1,7 +1,7 @@
 import {@Vigilant, @TextProperty, @ColorProperty, @ButtonProperty, @SwitchProperty, @CheckboxProperty, @SelectorProperty, @SliderProperty} from '../Vigilance/index';
 
 
-@Vigilant("Starcrest Addons", "Settings", {
+@Vigilant("StarcrestAddons", "Settings", {
     getCategoryComparator: () => (a) => {
         const categories = ['General', 'Mask Timer'];
         return categories.indexOf(a.name);

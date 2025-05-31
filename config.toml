@@ -1,7 +1,10 @@
 
 [general]
 	bot_name = "MAChatbridge"
-	auto_rejoin = true
+	auto_rejoin = false
 	seperator = "»"
 	enabled = true
+
+[mask_timer]
+	enable_mask_timer = false
 
