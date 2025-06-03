@@ -3,7 +3,7 @@ import {@Vigilant, @TextProperty, @ColorProperty, @ButtonProperty, @SwitchProper
 
 @Vigilant("StarcrestAddons", "Settings", {
     getCategoryComparator: () => (a) => {
-        const categories = ['General', 'Mask Timer'];
+        const categories = ['General', 'Mask Timer', 'Dungeons'];
         return categories.indexOf(a.name);
     }
 })

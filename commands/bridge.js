@@ -29,7 +29,7 @@ register("command", (...args) => {
                 ChatLib.chat("§aNet Worth of " + playerName + ": §6" + formatNumber(networth.toFixed(0)) + " Coins");
             }
             );
-            break;
+            break; 
             
         case "weight":
             if (!playerName) {

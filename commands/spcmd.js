@@ -42,7 +42,7 @@ register("command", (...args) => {
       "Content-Type": "application/json",
       "User-Agent": "Mozilla/5.0"
     },
-    timeout: 5000
+    timeout: 50000
   })
   .then(responseText => {
     try {
