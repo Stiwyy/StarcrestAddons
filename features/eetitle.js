@@ -27,6 +27,13 @@ const aliases = {
 	shooter: 'I4 (Sharp Shooter Device)',
 };
 
-function eetitle() {
-	if (!Settings.enabled && !Settings.earlyEnterTitleEnabled) return;
+const recentMessages = new Set();
+const CACHE_EXPIRY_MS = 5000;
+
+function normalizeMessage(msg) {
+	return msg
+		.toLowerCase()
+		.replace(/[^\w\s]/g, '')
+		.replace(/^(at|i'?m at|i am at|reached|at the|im at)\s+/i, '')
+		.trim();
 }
