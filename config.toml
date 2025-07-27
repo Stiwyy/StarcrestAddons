@@ -10,5 +10,5 @@
 
 [dungeons]
 	melody_title = false
-	early_enter_title = false
+	early_enter_title = true
 

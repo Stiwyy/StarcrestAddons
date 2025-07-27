@@ -1,4 +1,5 @@
 import Settings from '../settings';
+
 const PosMessages = [
 	{ message: 'At Early Enter 1!' },
 	{ message: 'At Early Enter 2!' },
@@ -8,21 +9,22 @@ const PosMessages = [
 	{ message: 'At Core!' },
 	{ message: 'At Arrows Device!' },
 	{ message: 'At Middle!' },
-	{ message: 'At I4' },
+	{ message: 'At I4 (Sharp Shooter Device)!' },
 ];
+
 const aliases = {
 	ee1: 'Early Enter 1',
 	ee2: 'Early Enter 2',
 	ee3: 'Early Enter 3',
 	ss: 'Simon Says Device',
 	simon: 'Simon Says Device',
+	'simon says': 'Simon Says Device',
+	'ss device': 'Simon Says Device',
 	levers: 'Levers Device',
 	core: 'Core',
 	arrows: 'Arrows Device',
 	middle: 'Middle',
 	i4: 'I4 (Sharp Shooter Device)',
-	'ss device': 'Simon Says Device',
-	'simon says': 'Simon Says Device',
 	sharp: 'I4 (Sharp Shooter Device)',
 	shooter: 'I4 (Sharp Shooter Device)',
 };
@@ -38,42 +40,58 @@ function normalizeMessage(msg) {
 		.trim();
 }
 
-function detectPosition(player, message) {
-	if (!Settings.enabled && !Settings.earlyEnterTitleEnabled) return;
+function detectPosition(message) {
+	ChatLib.chat(`&6[DEBUG]&r detectPosition called with msg="${message}"`);
 
 	const normalizedMessage = normalizeMessage(message);
+	ChatLib.chat(`&6[DEBUG]&r normalizedMessage="${normalizedMessage}"`);
 
-	// Check if message includes aliases
 	for (const [alias, fullName] of Object.entries(aliases)) {
-		if (normalizedMsg === alias || normalizedMsg.includes(alias)) {
+		if (normalizedMessage === alias || normalizedMessage.includes(alias)) {
+			ChatLib.chat(
+				`&6[DEBUG]&r Matched alias "${alias}" → "${fullName}"`
+			);
 			return fullName;
 		}
 	}
-	for (const posEntry of PosMessages) {
-		const normalizedPosMsg = normalizeMessage(posEntry.message);
 
+	for (const { message: raw } of PosMessages) {
+		const normalizedPos = normalizeMessage(raw);
 		if (
-			normalizedMsg.includes(normalizedPosMsg) ||
-			normalizedPosMsg.includes(normalizedMsg)
+			normalizedMessage.includes(normalizedPos) ||
+			normalizedPos.includes(normalizedMessage)
 		) {
-			return posEntry.message.replace(/^At /, '').replace(/!$/, '');
+			const clean = raw.replace(/^At /, '').replace(/!$/, '');
+			ChatLib.chat(
+				`&6[DEBUG]&r Matched PosMessages "${raw}" → "${clean}"`
+			);
+			return clean;
 		}
 	}
+
+	ChatLib.chat(`&6[DEBUG]&r No position detected`);
 	return null;
 }
 
-register('chat', (message, player) => {
-	if (!Settings.enabled && !Settings.earlyEnterTitleEnabled) return;
-	const position = detectPosition(player, message);
+register('chat', (player, message, event) => {
+	if (!Settings.enabled && !Settings.earlyEnterTitleEnabled) {
+		ChatLib.chat('&6[DEBUG]&r Module disabled, skipping');
+		return;
+	}
+	const position = detectPosition(message);
 	if (!position) return;
 
-	const cacheKey = `${player}-${position}-${Date.now()}`;
-	if (recentMessages.has(cacheKey)) return;
+	const cacheKey = `${player}-${position}`;
+	if (recentMessages.has(cacheKey)) {
+		ChatLib.chat(
+			`&6[DEBUG]&r Duplicate within ${CACHE_EXPIRY_MS}ms, skipping`
+		);
+		return;
+	}
 
 	recentMessages.add(cacheKey);
-	setTimeout(() => {
-		recentMessages.delete(cacheKey);
-	}, CACHE_EXPIRY_MS);
+	setTimeout(() => recentMessages.delete(cacheKey), CACHE_EXPIRY_MS);
 
-	Client.showTitle(`${player} is at ${position}!`, '', 10, 40, 10);
+	ChatLib.chat(`&a[DEBUG]&r Showing title: ${player} is at ${position}`);
+	Client.showTitle(`${player} is at ${position}`, '', 10, 40, 10);
 }).setCriteria('Party > ${player}: ${message}');
