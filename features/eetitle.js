@@ -37,3 +37,27 @@ function normalizeMessage(msg) {
 		.replace(/^(at|i'?m at|i am at|reached|at the|im at)\s+/i, '')
 		.trim();
 }
+
+function detectPosition(player, message) {
+	if (!Settings.enabled && !Settings.earlyEnterTitleEnabled) return;
+
+	const normalizedMessage = normalizeMessage(message);
+
+	// Check if message includes aliases
+	for (const [alias, fullName] of Object.entries(aliases)) {
+		if (normalizedMsg === alias || normalizedMsg.includes(alias)) {
+			return fullName;
+		}
+	}
+	for (const posEntry of PosMessages) {
+		const normalizedPosMsg = normalizeMessage(posEntry.message);
+
+		if (
+			normalizedMsg.includes(normalizedPosMsg) ||
+			normalizedPosMsg.includes(normalizedMsg)
+		) {
+			return posEntry.message.replace(/^At /, '').replace(/!$/, '');
+		}
+	}
+	return null;
+}
