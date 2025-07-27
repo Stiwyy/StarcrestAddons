@@ -73,11 +73,23 @@ function detectPosition(message) {
 	return null;
 }
 
-register('chat', (player, message, event) => {
-	if (!Settings.enabled && !Settings.earlyEnterTitleEnabled) {
+register('chat', (...args) => {
+	if (!Settings.enabled || !Settings.earlyEnterTitleEnabled) {
 		ChatLib.chat('&6[DEBUG]&r Module disabled, skipping');
 		return;
 	}
+
+	let event = args[args.length - 1];
+	let rawPlayer = args[0];
+	let message = args[1];
+
+	cancel(event);
+
+	let player = ChatLib.removeFormatting(rawPlayer);
+	ChatLib.chat(
+		`&6[DEBUG]&r Processing party chat - Player: ${player}, Message: ${message}`
+	);
+
 	const position = detectPosition(message);
 	if (!position) return;
 
@@ -93,5 +105,9 @@ register('chat', (player, message, event) => {
 	setTimeout(() => recentMessages.delete(cacheKey), CACHE_EXPIRY_MS);
 
 	ChatLib.chat(`&a[DEBUG]&r Showing title: ${player} is at ${position}`);
-	Client.showTitle(`${player} is at ${position}`, '', 10, 40, 10);
-}).setCriteria('Party > ${player}: ${message}');
+	Client.showTitle(`${player} is at ${position}!`, '', 10, 40, 10);
+
+	if (Settings.playSound) {
+		World.playSound('random.orb', 1.0, 1.0);
+	}
+}).setCriteria('&r&9Party &8> ${*} ${player}: &r${message}&r');
