@@ -1,7 +1,7 @@
 {
-    "name": "StarcrestAddons",
-    "description": "Decodes base64 Messages that start with <username> <seperator> <[Images]> <Base64 code> \n Also has some features suggested by the starcrest community-",
-    "version": "1.2.0",
-    "entry": "index.js",
-    "requires": ["Vigilance", "requestV2"]
+	"name": "StarcrestAddons",
+	"description": "Decodes base64 Messages that start with <username> <seperator> <[Images]> <Base64 code> \n Also has some features suggested by the starcrest community-",
+	"version": "1.3.0",
+	"entry": "index.js",
+	"requires": ["Vigilance", "requestV2"]
 }
