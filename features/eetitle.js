@@ -61,3 +61,19 @@ function detectPosition(player, message) {
 	}
 	return null;
 }
+
+register('chat', (message, player) => {
+	if (!Settings.enabled && !Settings.earlyEnterTitleEnabled) return;
+	const position = detectPosition(player, message);
+	if (!position) return;
+
+	const cacheKey = `${player}-${position}-${Date.now()}`;
+	if (recentMessages.has(cacheKey)) return;
+
+	recentMessages.add(cacheKey);
+	setTimeout(() => {
+		recentMessages.delete(cacheKey);
+	}, CACHE_EXPIRY_MS);
+
+	Client.showTitle(`${player} is at ${position}!`, '', 10, 40, 10);
+}).setCriteria('Party > ${player}: ${message}');

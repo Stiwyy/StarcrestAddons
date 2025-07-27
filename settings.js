@@ -87,7 +87,7 @@ class Settings {
     */
 	@SwitchProperty({
 		name: "Early Enter Title",
-		description: "Displays a title whenever a player is at an early enter spot.",
+		description: "Displays a title whenever a player is at an early enter spot. (Player needs to have positional messages enabled)",
 		category: "Dungeons",
 		property: "early_enter_title_enabled"
 	})
