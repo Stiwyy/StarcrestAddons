@@ -3,7 +3,7 @@ import {@Vigilant, @TextProperty, @ColorProperty, @ButtonProperty, @SwitchProper
 
 @Vigilant("StarcrestAddons", "Settings", {
     getCategoryComparator: () => (a) => {
-        const categories = ['General', 'Mask Timer', 'Dungeons', 'Goof',  'Debug'];
+        const categories = ['General', 'Mask Timer', 'Dungeons', 'Debug'];
         return categories.indexOf(a.name);
     }
 })
@@ -105,14 +105,6 @@ class Settings {
 		property: "melody_title_enabled"
 	})
 	melodyTitleEnabled = false;
-
-    // Goof Settings
-    /*
-    TODO:
-    =======================================================
-    Implement Playounds
-    =======================================================
-    */
 
 	@SwitchProperty({
 		name: "Debug Messages",

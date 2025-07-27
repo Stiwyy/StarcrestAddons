@@ -12,6 +12,6 @@
 	enable_mask_timer = false
 
 [dungeons]
-	melody_title = false
+	melody_title = true
 	early_enter_title = true
 

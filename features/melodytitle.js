@@ -69,5 +69,5 @@ register('chat', (player, message, event) => {
 	setTimeout(() => recentMelodyMessages.delete(cacheKey), CACHE_EXPIRY_MS);
 
 	debug(`Showing melody title for ${playerName}`);
-	Client.showTitle(`${playerName} has melody!`, '', 10, 40, 10);
+	Client.showTitle(`&3${playerName} has melody!`, '', 10, 40, 10);
 }).setCriteria('&r&9Party &8> ${player}: &r${message}&r');

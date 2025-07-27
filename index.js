@@ -5,3 +5,4 @@ import './features/base64';
 import './features/autorejoin';
 import './features/masktimer';
 import './features/eetitle';
+import './features/melodytitle';
