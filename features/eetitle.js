@@ -30,8 +30,14 @@ const aliases = {
 const recentMessages = new Set();
 const CACHE_EXPIRY_MS = 5000;
 
+function debug(message) {
+	if (Settings.debugMessages) {
+		ChatLib.chat(`&6[DEBUG]&r &f${message}`);
+	}
+}
+
 function normalizeMessage(msg) {
-	ChatLib.chat(`&6[DEBUG]&r &fnormalizeMessage input: "${msg}"`);
+	debug(`normalizeMessage input: "${msg}"`);
 
 	let normalized = msg.toLowerCase();
 	normalized = normalized.replace(/[^\w\s()0-9]/g, '');
@@ -41,7 +47,7 @@ function normalizeMessage(msg) {
 	);
 	normalized = normalized.replace(/\s+/g, ' ').trim();
 
-	ChatLib.chat(`&6[DEBUG]&r &fnormalizeMessage output: "${normalized}"`);
+	debug(`normalizeMessage output: "${normalized}"`);
 	return normalized;
 }
 
@@ -50,9 +56,9 @@ function getCleanPositionName(message) {
 }
 
 function detectPosition(userMsg) {
-	ChatLib.chat(`&6[DEBUG]&r &fdetectPosition called with msg="${userMsg}"`);
+	debug(`detectPosition called with msg="${userMsg}"`);
 	const normalizedUserMsg = normalizeMessage(userMsg);
-	ChatLib.chat(`&6[DEBUG]&r &fnormalizedUserMsg="${normalizedUserMsg}"`);
+	debug(`normalizedUserMsg="${normalizedUserMsg}"`);
 
 	let allMatches = [];
 
@@ -73,8 +79,8 @@ function detectPosition(userMsg) {
 			posWords.length > 1 &&
 			posWords.every((word) => userWords.includes(word));
 
-		ChatLib.chat(
-			`&6[DEBUG]&r &fPosition check: "${cleanPosName}" - exact=${exactMatch}, userContainsPos=${userContainsPos}, posContainsUser=${posContainsUser}, wordMatch=${wordMatch}`
+		debug(
+			`Position check: "${cleanPosName}" - exact=${exactMatch}, userContainsPos=${userContainsPos}, posContainsUser=${posContainsUser}, wordMatch=${wordMatch}`
 		);
 
 		if (exactMatch || userContainsPos || posContainsUser || wordMatch) {
@@ -90,8 +96,8 @@ function detectPosition(userMsg) {
 				quality: quality,
 			});
 
-			ChatLib.chat(
-				`&6[DEBUG]&r &fMatched position: "${cleanPosName}" with quality ${quality}`
+			debug(
+				`Matched position: "${cleanPosName}" with quality ${quality}`
 			);
 		}
 	});
@@ -108,8 +114,8 @@ function detectPosition(userMsg) {
 			const endsWithMatch = normalizedUserMsg.endsWith(normalizedAlias);
 			const containsMatch = normalizedUserMsg.includes(normalizedAlias);
 
-			ChatLib.chat(
-				`&6[DEBUG]&r &fAlias check: "${alias}" - wordBoundary=${wordBoundaryMatch}, startsWith=${startsWithMatch}, endsWith=${endsWithMatch}, contains=${containsMatch}`
+			debug(
+				`Alias check: "${alias}" - wordBoundary=${wordBoundaryMatch}, startsWith=${startsWithMatch}, endsWith=${endsWithMatch}, contains=${containsMatch}`
 			);
 
 			if (
@@ -131,8 +137,8 @@ function detectPosition(userMsg) {
 					quality: quality + normalizedAlias.length,
 				});
 
-				ChatLib.chat(
-					`&6[DEBUG]&r &fMatched alias: "${alias}" → "${fullName}" with quality ${
+				debug(
+					`Matched alias: "${alias}" → "${fullName}" with quality ${
 						quality + normalizedAlias.length
 					}`
 				);
@@ -149,8 +155,8 @@ function detectPosition(userMsg) {
 			const exactPhraseMatch =
 				normalizedUserMsg.includes(normalizedAlias);
 
-			ChatLib.chat(
-				`&6[DEBUG]&r &fMulti-word alias check: "${alias}" - allWordsPresent=${allWordsPresent}, exactPhrase=${exactPhraseMatch}`
+			debug(
+				`Multi-word alias check: "${alias}" - allWordsPresent=${allWordsPresent}, exactPhrase=${exactPhraseMatch}`
 			);
 
 			if (allWordsPresent || exactPhraseMatch) {
@@ -163,8 +169,8 @@ function detectPosition(userMsg) {
 					quality: quality + normalizedAlias.length,
 				});
 
-				ChatLib.chat(
-					`&6[DEBUG]&r &fMatched multi-word alias: "${alias}" → "${fullName}" with quality ${
+				debug(
+					`Matched multi-word alias: "${alias}" → "${fullName}" with quality ${
 						quality + normalizedAlias.length
 					}`
 				);
@@ -173,15 +179,15 @@ function detectPosition(userMsg) {
 	});
 
 	if (allMatches.length === 0) {
-		ChatLib.chat(`&6[DEBUG]&r &fNo position detected`);
+		debug(`No position detected`);
 		return null;
 	}
 
 	allMatches.sort((a, b) => b.quality - a.quality);
 	const bestMatch = allMatches[0];
 
-	ChatLib.chat(
-		`&6[DEBUG]&r &fBest match: ${bestMatch.type} "${bestMatch.value}" (quality: ${bestMatch.quality})`
+	debug(
+		`Best match: ${bestMatch.type} "${bestMatch.value}" (quality: ${bestMatch.quality})`
 	);
 	return bestMatch.value;
 }
@@ -189,37 +195,31 @@ function detectPosition(userMsg) {
 function extractUsername(player) {
 	const cleanPlayer = ChatLib.removeFormatting(player);
 	const username = cleanPlayer.replace(/^\[.*?\]\s*/, '');
-	ChatLib.chat(
-		`&6[DEBUG]&r &fExtracted username: "${username}" from "${cleanPlayer}"`
-	);
+	debug(`Extracted username: "${username}" from "${cleanPlayer}"`);
 	return username;
 }
 
 register('chat', (player, message, event) => {
 	if (!Settings.enabled || !Settings.earlyEnterTitleEnabled) {
-		ChatLib.chat('&6[DEBUG]&r &fModule disabled, skipping');
+		debug(`Module disabled, skipping`);
 		return;
 	}
 
 	const playerName = extractUsername(player);
-	ChatLib.chat(
-		`&6[DEBUG]&r &fProcessing chat - Player: ${playerName}, Message: ${message}`
-	);
+	debug(`Processing chat - Player: ${playerName}, Message: ${message}`);
 
 	const position = detectPosition(message);
 	if (!position) return;
 
 	const cacheKey = `${playerName}-${position}`;
 	if (recentMessages.has(cacheKey)) {
-		ChatLib.chat(
-			`&6[DEBUG]&r &fDuplicate within ${CACHE_EXPIRY_MS}ms, skipping`
-		);
+		debug(`Duplicate within ${CACHE_EXPIRY_MS}ms, skipping`);
 		return;
 	}
 
 	recentMessages.add(cacheKey);
 	setTimeout(() => recentMessages.delete(cacheKey), CACHE_EXPIRY_MS);
 
-	ChatLib.chat(`&6[DEBUG]&r &fShowing title: ${playerName} at ${position}`);
+	debug(`Showing title: ${playerName} at ${position}`);
 	Client.showTitle(`${playerName} is at ${position}!`, '', 10, 40, 10);
 }).setCriteria('&r&9Party &8> ${player}: &r${message}&r');
