@@ -221,5 +221,5 @@ register('chat', (player, message, event) => {
 	setTimeout(() => recentMessages.delete(cacheKey), CACHE_EXPIRY_MS);
 
 	debug(`Showing title: ${playerName} at ${position}`);
-	Client.showTitle(`${playerName} is at ${position}!`, '', 10, 40, 10);
+	Client.showTitle(`&3${playerName} is at ${position}!`, '', 10, 40, 10);
 }).setCriteria('&r&9Party &8> ${player}: &r${message}&r');

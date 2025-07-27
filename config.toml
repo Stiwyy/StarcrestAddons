@@ -5,6 +5,9 @@
 	seperator = "»"
 	enabled = true
 
+[debug]
+	debug_messages = false
+
 [mask_timer]
 	enable_mask_timer = false
 
