@@ -3,7 +3,7 @@ import {@Vigilant, @TextProperty, @ColorProperty, @ButtonProperty, @SwitchProper
 
 @Vigilant("StarcrestAddons", "Settings", {
     getCategoryComparator: () => (a) => {
-        const categories = ['General', 'Mask Timer', 'Dungeons'];
+        const categories = ['General', 'Mask Timer', 'Dungeons', 'Goof'];
         return categories.indexOf(a.name);
     }
 })
@@ -78,8 +78,41 @@ class Settings {
     MovePhoenixTimerGui() {
         ChatLib.command("phoenixgui", true);
     }
+    // Dungeons Settings
+    /*
+    TODO:
+    =======================================================
+    Implement EE2 Title
+    =======================================================   
+    */
+	@SwitchProperty({
+		name: "Early Enter Title",
+		description: "Displays a title whenever a player is at an early enter spot.",
+		category: "Dungeons",
+		property: "early_enter_title_enabled"
+	})
+	earlyEnterTitleEnabled = false;
+    /*
+    TODO:
+    =======================================================
+    Implement Melody Title
+    =======================================================
+    */ 
+	@SwitchProperty({
+		name: "Melody Title",
+		description: "Displays a title whenever a player has melody.",
+		category: "Dungeons",
+		property: "melody_title_enabled"
+	})
+	melodyTitleEnabled = false;
 
-
+    // Goof Settings
+    /*
+    TODO:
+    =======================================================
+    Implement Playounds
+    =======================================================
+    */
 
     constructor() {
         this.initialize(this);

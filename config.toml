@@ -1,10 +1,14 @@
 
 [general]
 	bot_name = "MAChatbridge"
-	auto_rejoin = false
+	auto_rejoin = true
 	seperator = "»"
 	enabled = true
 
 [mask_timer]
 	enable_mask_timer = false
+
+[dungeons]
+	melody_title = false
+	early_enter_title = false
 
