@@ -1,4 +1,5 @@
 import Settings from '../settings';
+import { isP3Active } from '../utils/inP3';
 
 const CACHE_EXPIRY_MS = 5000;
 const recentMelodyMessages = new Set();
@@ -46,6 +47,11 @@ function detectMelody(message) {
 register('chat', (player, message, event) => {
 	if (!Settings.enabled || !Settings.melodyTitleEnabled) {
 		debug(`Melody module disabled, skipping`);
+		return;
+	}
+
+	if (!isP3Active()) {
+		debug(`Not in P3, skipping`);
 		return;
 	}
 

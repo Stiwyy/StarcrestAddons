@@ -1,4 +1,5 @@
 import Settings from '../settings';
+import { isP3Active } from '../utils/inP3';
 
 const PosMessages = [
 	{ message: 'At Early Enter 2!' },
@@ -38,7 +39,6 @@ function debug(message) {
 
 function normalizeMessage(msg) {
 	debug(`normalizeMessage input: "${msg}"`);
-
 	let normalized = msg.toLowerCase();
 	normalized = normalized.replace(/[^\w\s()0-9]/g, '');
 	normalized = normalized.replace(
@@ -46,7 +46,6 @@ function normalizeMessage(msg) {
 		''
 	);
 	normalized = normalized.replace(/\s+/g, ' ').trim();
-
 	debug(`normalizeMessage output: "${normalized}"`);
 	return normalized;
 }
@@ -202,6 +201,11 @@ function extractUsername(player) {
 register('chat', (player, message, event) => {
 	if (!Settings.enabled || !Settings.earlyEnterTitleEnabled) {
 		debug(`Module disabled, skipping`);
+		return;
+	}
+
+	if (!isP3Active()) {
+		debug(`Not in P3, skipping`);
 		return;
 	}
 
