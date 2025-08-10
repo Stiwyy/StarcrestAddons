@@ -79,12 +79,7 @@ class Settings {
         ChatLib.command("phoenixgui", true);
     }
     // Dungeons Settings
-    /*
-    TODO:
-    =======================================================
-    Implement EE2 Title
-    =======================================================   
-    */
+    
 	@SwitchProperty({
 		name: "Early Enter Title",
 		description: "Displays a title whenever a player is at an early enter spot. (Player needs to have positional messages enabled)",
@@ -92,12 +87,7 @@ class Settings {
 		property: "early_enter_title_enabled"
 	})
 	earlyEnterTitleEnabled = false;
-    /*
-    TODO:
-    =======================================================
-    Implement Melody Title
-    =======================================================
-    */ 
+   
 	@SwitchProperty({
 		name: "Melody Title",
 		description: "Displays a title whenever a player has melody.",
@@ -106,6 +96,15 @@ class Settings {
 	})
 	melodyTitleEnabled = false;
 
+	@SwitchProperty({
+		name: "flint Arrow Alert",
+		description: "Alerts you when you pick up a Flint Arrow",
+		category: "Dungeons",
+		property: "flint_arrow_alert"
+	})
+	flintArrowAlert = true;
+
+	//debug Settings
 	@SwitchProperty({
 		name: "Debug Messages",
 		description: "Show debug messages in chat. (Recommended to disable)",
