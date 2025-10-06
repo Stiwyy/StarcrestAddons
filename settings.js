@@ -3,7 +3,7 @@ import {@Vigilant, @TextProperty, @ColorProperty, @ButtonProperty, @SwitchProper
 
 @Vigilant("StarcrestAddons", "Settings", {
     getCategoryComparator: () => (a) => {
-        const categories = ['General', 'Mask Timer', 'Dungeons', 'Debug'];
+        const categories = ['General', 'Mask Timer', 'Dungeons', 'Misc', 'Debug'];
         return categories.indexOf(a.name);
     }
 })
@@ -96,13 +96,12 @@ class Settings {
 	})
 	melodyTitleEnabled = false;
 
-	@SwitchProperty({
-		name: "flint Arrow Alert",
-		description: "Alerts you when you pick up a Flint Arrow",
-		category: "Dungeons",
-		property: "flint_arrow_alert"
-	})
-	flintArrowAlert = true;
+    @SwitchProperty({
+        name: "Chat Emotes",
+        description: "Transforms text into expressive emotes.",
+        category: "Misc"
+    })
+    ChatEmotes = true
 
 	//debug Settings
 	@SwitchProperty({
